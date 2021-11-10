@@ -1,0 +1,19 @@
+{
+    "ticket": [
+        {
+            "name": "Maks",
+            "number": 1,
+            "price": 500.0
+        },
+        {
+            "name": "Maks",
+            "number": 2,
+            "price": 500.0
+        },
+        {
+            "name": "David",
+            "number": 3,
+            "price": 1000
+        }
+    ]
+}
