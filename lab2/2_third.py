@@ -1,7 +1,7 @@
 class Group:
 
     def __init__(self, *students):
-        self.students = students
+        self.__students = students
 
     @property
     def students(self):
