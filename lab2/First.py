@@ -1,7 +1,7 @@
 class Rectangle(object):
     def __init__(self, length=1, width=1):
-        self.__length = length
-        self.__width = width
+        self.length = length
+        self.width = width
 
     @staticmethod
     def check(value):
