@@ -51,15 +51,15 @@ class TREE:
 class BINARYTREE:
 
     def __init__(self, tree):
-        self.tree = tree
+        self.__tree = tree
 
     def new_object(self, key, price):
         """"Adding items to the tree"""
-        self.tree.adding_product(key, price)
+        self.__tree.adding_product(key, price)
 
     def get_value(self, key, value):
         """"Getting a price for a certain amount of goods"""
-        return value * self.tree.search(key)
+        return value * self.__tree.search(key)
 
 
 my_tree = BINARYTREE(TREE())

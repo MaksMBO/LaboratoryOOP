@@ -1,8 +1,8 @@
 class Product:
     def __init__(self, price, description, dimensions):
-        self.price = price
-        self.description = description
-        self.dimensions = dimensions
+        self.__price = price
+        self.__description = description
+        self.__dimensions = dimensions
 
     @property
     def price(self):
@@ -40,10 +40,10 @@ class Product:
 
 class Customer:
     def __init__(self, surname, name, patronymic, mobile_phone):
-        self.surname = surname
-        self.name = name
-        self.patronymic = patronymic
-        self.mobile_phone = mobile_phone
+        self.__surname = surname
+        self.__name = name
+        self.__patronymic = patronymic
+        self.__mobile_phone = mobile_phone
 
     @property
     def surname(self):
@@ -88,8 +88,8 @@ class Customer:
 
 class Order:
     def __init__(self, person, *products):
-        self.person = person
-        self.products = products
+        self.__person = person
+        self.__products = products
 
     @property
     def person(self):
