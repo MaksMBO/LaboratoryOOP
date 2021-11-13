@@ -4,8 +4,8 @@ from datetime import datetime
 
 class Person:
     def __init__(self, name, student):
-        self.__name = name
-        self.__student = student
+        self.name = name
+        self.student = student
 
         with open('purchased_tickets.json', 'w') as file:
             file_in = {"ticket": []}
