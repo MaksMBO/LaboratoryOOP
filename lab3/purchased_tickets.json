@@ -14,6 +14,11 @@
             "name": "David",
             "number": 3,
             "price": 1000
+        },
+        {
+            "name": "Maks",
+            "number": 4,
+            "price": 500.0
         }
     ]
 }
