@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from variables import STUDENT_TICKET, ADVANCE_TICKET, LATE_TICKET
 
 
 class Person:
@@ -94,13 +95,13 @@ class Buy(Information):
         difference = last_day - current_date
 
         if difference.days > 0 and person.student:
-            return self.price * 0.5
+            return self.price * STUDENT_TICKET
         if difference.days >= 60:
-            return self.price * 0.6
+            return self.price * ADVANCE_TICKET
         if 10 <= difference.days < 60:
             return self.price
         if 0 < difference.days < 10:
-            return self.price * 1.1
+            return self.price * LATE_TICKET
 
     @staticmethod
     def number(value):
@@ -108,7 +109,7 @@ class Buy(Information):
             for ticket in json.load(file)["ticket"]:
                 if ticket["number"] == value:
                     return f"Ticket#{ticket['number']}:\nName: {ticket['name']}\nPrice: {ticket['price']}\n\n"
-            # raise IndexError("Invalid argument")
+            raise IndexError("Invalid argument")
 
     @staticmethod
     def name(person):
@@ -152,4 +153,4 @@ print(f"This ticket will cost: {buy.show_price(David)}\n\n\n")
 print(f"Tickets bought {Maks.name}:")
 for tickets in buy.name(Maks):
     print(f"\tTicket#{tickets['number']}:\n\tName: {tickets['name']}\n\tPrice: {tickets['price']}\n")
-print(buy.number(1))
+print(buy.number(21))
