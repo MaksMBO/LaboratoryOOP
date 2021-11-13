@@ -32,8 +32,6 @@ class Person:
         self.__student = student
 
 
-# говнокод №2
-
 class Information:
     def __init__(self):
         with open("ticket.json", 'r') as file:
@@ -147,7 +145,6 @@ buy.buy_ticket(Maks)
 buy.buy_ticket(Maks)
 buy.buy_ticket(David)
 buy.buy_ticket(Maks)
-
 
 print(f"This ticket will cost: {buy.show_price(Maks)}")
 print(f"This ticket will cost: {buy.show_price(David)}\n\n\n")
