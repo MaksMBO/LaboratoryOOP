@@ -10,9 +10,6 @@ class Person:
         with open('purchased_tickets.json', 'w') as file:
             file_in = {"ticket": []}
             json.dump(file_in, file, indent=4)
-        with open('ticket.json', 'w') as file:
-            file_in = {"number": 500, "purchased_tickets": 0, "price": 1000, "year": 2021, "month": 12, "day": 28}
-            json.dump(file_in, file, indent=4)
 
     @property
     def name(self):
@@ -34,23 +31,97 @@ class Person:
             raise TypeError("The value must be a bool")
         self.__student = student
 
-    def get_price(self):
-        with open('ticket.json', 'r') as file:
-            data_file = json.load(file)
-            last_day = datetime(data_file["year"], data_file["month"], data_file["day"])
-            current_date = datetime.now()
-            difference = last_day - current_date
 
-            if difference.days > 0 and self.__student:
-                return data_file["price"] * 0.5
-            if difference.days >= 60:
-                return data_file["price"] * 0.6
-            if 10 <= difference.days < 60:
-                return data_file["price"]
-            if 0 < difference.days < 10:
-                return data_file["price"] * 1.1
+# говнокод №2
 
-    def buy_ticket(self):
+class Information:
+    def __init__(self):
+        with open("ticket.json", 'r') as file:
+            event = json.load(file)
+        self.price = event['price']
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, value):
+        if not value or not isinstance(value, (float, int)):
+            raise TypeError("Price must be a number")
+        self.__price = value
+
+
+class Buy(Information):
+    def __init__(self):
+        super().__init__()
+        with open("ticket.json", 'r') as file:
+            event = json.load(file)
+        self.year = event['year']
+        self.month = event['month']
+        self.day = event['day']
+
+    @property
+    def year(self):
+        return self.__year
+
+    @year.setter
+    def year(self, value):
+        if not value or not isinstance(value, int):
+            raise TypeError("Year must be a number")
+        self.__year = value
+
+    @property
+    def month(self):
+        return self.__month
+
+    @month.setter
+    def month(self, value):
+        if not value or not isinstance(value, int):
+            raise TypeError("Month must be a number")
+        self.__month = value
+
+    @property
+    def day(self):
+        return self.__day
+
+    @day.setter
+    def day(self, value):
+        if not value or not isinstance(value, int):
+            raise TypeError("Day must be a number")
+        self.__day = value
+
+    def show_price(self, person):
+        last_day = datetime(self.year, self.month, self.day)
+        current_date = datetime.now()
+        difference = last_day - current_date
+
+        if difference.days > 0 and person.student:
+            return self.price * 0.5
+        if difference.days >= 60:
+            return self.price * 0.6
+        if 10 <= difference.days < 60:
+            return self.price
+        if 0 < difference.days < 10:
+            return self.price * 1.1
+
+    @staticmethod
+    def number(value):
+        with open('purchased_tickets.json', 'r') as file:
+            for ticket in json.load(file)["ticket"]:
+                if ticket["number"] == value:
+                    return f"Ticket#{ticket['number']}:\nName: {ticket['name']}\nPrice: {ticket['price']}\n\n"
+            # raise IndexError("Invalid argument")
+
+    @staticmethod
+    def name(person):
+        with open('purchased_tickets.json', 'r') as file:
+            ticket_list = []
+            for ticket in json.load(file)["ticket"]:
+                if ticket["name"] == person.name:
+                    ticket_list.append(ticket)
+            return ticket_list
+
+    def buy_ticket(self, person):
         with open('ticket.json', 'r') as file:
             jfile = json.load(file)
         jfile["number"] -= 1
@@ -61,38 +132,27 @@ class Person:
             with open('ticket.json', 'w') as file_ticket:
                 json.dump(jfile, file_ticket, indent=4)
             with open('ticket.json', 'r') as file_json:
-                ticket = {"name": self.name, "number": json.load(file_json)["purchased_tickets"],
-                          "price": self.get_price()}
+                ticket = {"name": person.name, "number": json.load(file_json)["purchased_tickets"],
+                          "price": self.show_price(person)}
             purchased_tickets_file["ticket"].append(ticket)
             json.dump(purchased_tickets_file, file, indent=4)
-
-    @staticmethod
-    def get_number(value):
-        with open('purchased_tickets.json', 'r') as file:
-            for ticket in json.load(file)["ticket"]:
-                if ticket["number"] == value:
-                    return f"Ticket#{ticket['number']}:\nName: {ticket['name']}\nPrice: {ticket['price']}\n\n"
-            raise IndexError("Invalid argument")
-
-    def get_name(self):
-        with open('purchased_tickets.json', 'r') as file:
-            ticket_list = []
-            for ticket in json.load(file)["ticket"]:
-                if ticket["name"] == self.__name:
-                    ticket_list.append(ticket)
-            return ticket_list
 
 
 Maks = Person("Maks", True)
 David = Person("David", False)
 
-Maks.buy_ticket()
-Maks.buy_ticket()
-David.buy_ticket()
-print(Maks.get_number(3))
-print(f"This ticket will cost: {Maks.get_price()}")
-print(f"This ticket will cost: {David.get_price()}\n\n\n")
+buy = Buy()
+
+buy.buy_ticket(Maks)
+buy.buy_ticket(Maks)
+buy.buy_ticket(David)
+buy.buy_ticket(Maks)
+
+
+print(f"This ticket will cost: {buy.show_price(Maks)}")
+print(f"This ticket will cost: {buy.show_price(David)}\n\n\n")
 
 print(f"Tickets bought {Maks.name}:")
-for tickets in Maks.get_name():
+for tickets in buy.name(Maks):
     print(f"\tTicket#{tickets['number']}:\n\tName: {tickets['name']}\n\tPrice: {tickets['price']}\n")
+print(buy.number(1))
