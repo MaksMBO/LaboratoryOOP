@@ -123,6 +123,8 @@ class Buy(Information):
     def buy_ticket(self, person):
         with open('ticket.json', 'r') as file:
             jfile = json.load(file)
+        if jfile["number"] <= 0:
+            raise IndexError('This number is over')
         jfile["number"] -= 1
         jfile["purchased_tickets"] += 1
         with open('purchased_tickets.json', 'r') as file:
@@ -153,4 +155,4 @@ print(f"This ticket will cost: {buy.show_price(David)}\n\n\n")
 print(f"Tickets bought {Maks.name}:")
 for tickets in buy.name(Maks):
     print(f"\tTicket#{tickets['number']}:\n\tName: {tickets['name']}\n\tPrice: {tickets['price']}\n")
-print(buy.number(21))
+print(buy.number(26))
