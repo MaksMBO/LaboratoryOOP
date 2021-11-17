@@ -1,0 +1,26 @@
+{
+    "pizza": [
+        {
+            "Name": "Max",
+            "Id": 1,
+            "Title": "calzone",
+            "Price": 140,
+            "Ingredients": [
+                "champion",
+                "chicken breast",
+                "pineapple"
+            ]
+        },
+        {
+            "Name": "David",
+            "Id": 2,
+            "Title": "four cheeses",
+            "Price": 180,
+            "Ingredients": [
+                "mozzarella cheese",
+                "pineapple",
+                "champion"
+            ]
+        }
+    ]
+}

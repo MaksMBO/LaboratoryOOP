@@ -1,0 +1,27 @@
+{
+    "pizza": {
+        "hawaiian": 98,
+        "capricious": 97,
+        "calzone": 53,
+        "four cheeses": 96,
+        "diabola": 100,
+        "sicilian": 99,
+        "margarita": 96
+    },
+    "price": {
+        "hawaiian": 120,
+        "capricious": 125,
+        "calzone": 140,
+        "four cheeses": 180,
+        "diabola": 150,
+        "sicilian": 160,
+        "margarita": 110
+    },
+    "ingredients": {
+        "ham": 32,
+        "mozzarella cheese": 45,
+        "chicken breast": 47,
+        "pineapple": 47,
+        "champion": 47
+    }
+}
