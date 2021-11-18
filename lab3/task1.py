@@ -5,6 +5,7 @@ from variables import STUDENT_TICKET, ADVANCE_TICKET, LATE_TICKET
 
 class Person:
     def __init__(self, name, student):
+        """gets the name of the person and finds out if he is a student"""
         self.name = name
         self.student = student
 
@@ -35,6 +36,7 @@ class Person:
 
 class Information:
     def __init__(self):
+        """gets the price of pizza"""
         with open("ticket.json", 'r') as file:
             event = json.load(file)
         self.price = event['price']
@@ -52,6 +54,7 @@ class Information:
 
 class Buy(Information):
     def __init__(self):
+        """find out the deadline for the event"""
         super().__init__()
         with open("ticket.json", 'r') as file:
             event = json.load(file)

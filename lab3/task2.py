@@ -6,6 +6,7 @@ from variables import DATE_COEFFICIENT, PIZZA_OF_THE_DAY, HAWAIIAN, CAPRICIOUS, 
 
 class Person:
     def __init__(self, name, id_person):
+        """find out the name and ID of the person"""
         self.id_person = id_person
         self.name = name
 
@@ -32,6 +33,7 @@ class Person:
 
 class Information:
     def __init__(self):
+        """find out the price of different pizzas"""
         with open("pizza.json", 'r') as file:
             event = json.load(file)['price']
         self.price_hawaiian = event['hawaiian']
@@ -115,6 +117,7 @@ class Information:
 
 class Pizza(Information):
     def __init__(self):
+        """creating an order"""
         super().__init__()
         with open('bought_pizza.json', 'w') as file:
             file_in = {"pizza": []}
