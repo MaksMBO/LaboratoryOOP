@@ -2,22 +2,22 @@
     "ticket": [
         {
             "name": "Maks",
-            "number": 21,
+            "number": 1,
             "price": 500.0
         },
         {
             "name": "Maks",
-            "number": 22,
+            "number": 2,
+            "price": 500.0
+        },
+        {
+            "name": "Maks",
+            "number": 3,
             "price": 500.0
         },
         {
             "name": "David",
-            "number": 23,
-            "price": 1000
-        },
-        {
-            "name": "Maks",
-            "number": 24,
+            "number": 4,
             "price": 500.0
         }
     ]
