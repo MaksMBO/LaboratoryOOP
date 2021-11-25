@@ -76,6 +76,35 @@ class Regular_ticket:
     def show_price(self):
         return self.price
 
+    def price_tickets(self, tickets):
+        last_day = datetime(self.year, self.month, self.day)
+        current_date = datetime.now()
+        difference = last_day - current_date
+        if difference.days >= SIXTY:
+            return self.price * ADVANCE_TICKET
+        if TEN <= difference.days < SIXTY:
+            return self.price
+        if ZERO < difference.days < TEN:
+            return self.price * LATE_TICKET
+
+    def buy_ticket(self, person, type_tickets=None):
+        with open('ticket.json', 'r') as file:
+            jfile = json.load(file)
+        if jfile["number"] <= 0:
+            raise IndexError('This number is over')
+        jfile["number"] -= 1
+        jfile["purchased_tickets"] += 1
+        with open('purchased_tickets.json', 'r') as file:
+            purchased_tickets_file = json.load(file)
+        with open('ticket.json', 'w') as file_ticket:
+            json.dump(jfile, file_ticket, indent=4)
+        with open('purchased_tickets.json', 'w') as file:
+            with open('ticket.json', 'r') as file_json:
+                tickets = {"name": person.name, "number": json.load(file_json)["purchased_tickets"],
+                           "price": self.price_tickets(type_tickets)}
+            purchased_tickets_file["ticket"].append(tickets)
+            json.dump(purchased_tickets_file, file, indent=4)
+
 
 class Student_ticket(Regular_ticket):
     def __init__(self):
@@ -85,42 +114,29 @@ class Student_ticket(Regular_ticket):
     def show_price(self):
         return self.student_ticket_price
 
+    def buy_ticket(self, person, type_tickets=None):
+        with open('ticket.json', 'r') as file:
+            jfile = json.load(file)
+        if jfile["number"] <= 0:
+            raise IndexError('This number is over')
+        jfile["number"] -= 1
+        jfile["purchased_tickets"] += 1
+        with open('purchased_tickets.json', 'r') as file:
+            purchased_tickets_file = json.load(file)
+        with open('ticket.json', 'w') as file_ticket:
+            json.dump(jfile, file_ticket, indent=4)
+        with open('purchased_tickets.json', 'w') as file:
+            with open('ticket.json', 'r') as file_json:
+                tickets = {"name": person.name, "number": json.load(file_json)["purchased_tickets"],
+                           "price": self.show_price()}
+            purchased_tickets_file["ticket"].append(tickets)
+            json.dump(purchased_tickets_file, file, indent=4)
 
-class Advance_ticket(Regular_ticket):
-    def __init__(self):
-        super().__init__()
-        self.advance_ticket_price = self.price * ADVANCE_TICKET
 
-    def show_price(self):
-        return self.advance_ticket_price
-
-
-class Late_ticket(Regular_ticket):
-    def __init__(self):
-        super().__init__()
-        self.late_ticket_price = self.price * LATE_TICKET
-
-    def show_price(self):
-        return self.late_ticket_price
-
-
-class Tickets(Student_ticket, Advance_ticket, Late_ticket):
+class Tickets(Regular_ticket):
     def __init__(self):
         """find out the deadline for the event"""
         super().__init__()
-
-    def price_tickets(self, tickets):
-        last_day = datetime(self.year, self.month, self.day)
-        current_date = datetime.now()
-        difference = last_day - current_date
-        if difference.days > ZERO and isinstance(tickets, Student_ticket):
-            return self.student_ticket_price
-        if difference.days >= SIXTY:
-            return self.advance_ticket_price
-        if TEN <= difference.days < SIXTY:
-            return self.price
-        if ZERO < difference.days < TEN:
-            return self.late_ticket_price
 
     @staticmethod
     def number(value):
@@ -143,28 +159,8 @@ class Tickets(Student_ticket, Advance_ticket, Late_ticket):
                     ticket_list.append(tickets)
             return ticket_list
 
-    def buy_ticket(self, person, type_tickets=None):
-        with open('ticket.json', 'r') as file:
-            jfile = json.load(file)
-        if jfile["number"] <= 0:
-            raise IndexError('This number is over')
-        jfile["number"] -= 1
-        jfile["purchased_tickets"] += 1
-        with open('purchased_tickets.json', 'r') as file:
-            purchased_tickets_file = json.load(file)
-        with open('ticket.json', 'w') as file_ticket:
-            json.dump(jfile, file_ticket, indent=4)
-        with open('purchased_tickets.json', 'w') as file:
-            with open('ticket.json', 'r') as file_json:
-                tickets = {"name": person.name, "number": json.load(file_json)["purchased_tickets"],
-                           "price": self.price_tickets(type_tickets)}
-            purchased_tickets_file["ticket"].append(tickets)
-            json.dump(purchased_tickets_file, file, indent=4)
-
 
 student_ticket = Student_ticket()
-advance_ticket = Advance_ticket()
-late_ticket = Late_ticket()
 regular_ticket = Regular_ticket()
 ticket = Tickets()
 
@@ -172,16 +168,15 @@ Maks = Person("Maks")
 David = Person("David")
 
 print(f'Price student ticket: {student_ticket.show_price()}')
-print(f'Price advance ticket: {advance_ticket.show_price()}')
-print(f'Price late ticket: {late_ticket.show_price()}')
 print(f'Price regular ticket: {regular_ticket.show_price()}\n\n')
 
-ticket.buy_ticket(Maks, student_ticket)
-ticket.buy_ticket(Maks, student_ticket)
-ticket.buy_ticket(Maks, student_ticket)
-ticket.buy_ticket(David, ticket)
+ticket.buy_ticket(Maks)
+ticket.buy_ticket(Maks)
+ticket.buy_ticket(Maks)
+ticket.buy_ticket(David)
+student_ticket.buy_ticket(Maks)
 
-print(f'{ticket.number(1)}')
+print(f'{ticket.number(35)}')
 
 print("Tickets bought by Maks: ")
 for i in range(len(ticket.name(Maks))):
