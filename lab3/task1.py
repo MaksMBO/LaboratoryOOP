@@ -76,7 +76,7 @@ class Regular_ticket:
     def show_price(self):
         return self.price
 
-    def price_tickets(self, tickets):
+    def price_tickets(self):
         last_day = datetime(self.year, self.month, self.day)
         current_date = datetime.now()
         difference = last_day - current_date
@@ -87,7 +87,7 @@ class Regular_ticket:
         if ZERO < difference.days < TEN:
             return self.price * LATE_TICKET
 
-    def buy_ticket(self, person, type_tickets=None):
+    def buy_ticket(self, person):
         with open('ticket.json', 'r') as file:
             jfile = json.load(file)
         if jfile["number"] <= 0:
@@ -101,7 +101,7 @@ class Regular_ticket:
         with open('purchased_tickets.json', 'w') as file:
             with open('ticket.json', 'r') as file_json:
                 tickets = {"name": person.name, "number": json.load(file_json)["purchased_tickets"],
-                           "price": self.price_tickets(type_tickets)}
+                           "price": self.price_tickets()}
             purchased_tickets_file["ticket"].append(tickets)
             json.dump(purchased_tickets_file, file, indent=4)
 
@@ -111,26 +111,8 @@ class Student_ticket(Regular_ticket):
         super().__init__()
         self.student_ticket_price = self.price * STUDENT_TICKET
 
-    def show_price(self):
+    def price_tickets(self):
         return self.student_ticket_price
-
-    def buy_ticket(self, person, type_tickets=None):
-        with open('ticket.json', 'r') as file:
-            jfile = json.load(file)
-        if jfile["number"] <= 0:
-            raise IndexError('This number is over')
-        jfile["number"] -= 1
-        jfile["purchased_tickets"] += 1
-        with open('purchased_tickets.json', 'r') as file:
-            purchased_tickets_file = json.load(file)
-        with open('ticket.json', 'w') as file_ticket:
-            json.dump(jfile, file_ticket, indent=4)
-        with open('purchased_tickets.json', 'w') as file:
-            with open('ticket.json', 'r') as file_json:
-                tickets = {"name": person.name, "number": json.load(file_json)["purchased_tickets"],
-                           "price": self.show_price()}
-            purchased_tickets_file["ticket"].append(tickets)
-            json.dump(purchased_tickets_file, file, indent=4)
 
 
 class Tickets(Regular_ticket):
@@ -167,8 +149,8 @@ ticket = Tickets()
 Maks = Person("Maks")
 David = Person("David")
 
-print(f'Price student ticket: {student_ticket.show_price()}')
-print(f'Price regular ticket: {regular_ticket.show_price()}\n\n')
+print(f'Price student ticket: {student_ticket.price_tickets()}')
+print(f'Price regular ticket: {regular_ticket.price_tickets()}\n\n')
 
 ticket.buy_ticket(Maks)
 ticket.buy_ticket(Maks)
@@ -176,7 +158,7 @@ ticket.buy_ticket(Maks)
 ticket.buy_ticket(David)
 student_ticket.buy_ticket(Maks)
 
-print(f'{ticket.number(35)}')
+print(f'{ticket.number(55)}')
 
 print("Tickets bought by Maks: ")
 for i in range(len(ticket.name(Maks))):
