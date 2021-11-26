@@ -76,6 +76,27 @@ class Regular_ticket:
     def show_price(self):
         return self.price
 
+    @staticmethod
+    def number(value):
+        if not value or not isinstance(value, int):
+            raise RuntimeError("The number must be int")
+        with open('purchased_tickets.json', 'r') as file:
+            for tickets in json.load(file)["ticket"]:
+                if tickets["number"] == value:
+                    return f"Ticket#{tickets['number']}:\nName: {tickets['name']}\nPrice: {tickets['price']}\n\n"
+            raise IndexError("Invalid argument")
+
+    @staticmethod
+    def name(person):
+        if not person or not isinstance(person, Person):
+            raise RuntimeError("The number must be int")
+        with open('purchased_tickets.json', 'r') as file:
+            ticket_list = []
+            for tickets in json.load(file)["ticket"]:
+                if tickets["name"] == person.name:
+                    ticket_list.append(tickets)
+            return ticket_list
+
     def price_tickets(self):
         last_day = datetime(self.year, self.month, self.day)
         current_date = datetime.now()
@@ -115,36 +136,8 @@ class Student_ticket(Regular_ticket):
         return self.student_ticket_price
 
 
-class Tickets(Regular_ticket):
-    def __init__(self):
-        """find out the deadline for the event"""
-        super().__init__()
-
-    @staticmethod
-    def number(value):
-        if not value or not isinstance(value, int):
-            raise RuntimeError("The number must be int")
-        with open('purchased_tickets.json', 'r') as file:
-            for tickets in json.load(file)["ticket"]:
-                if tickets["number"] == value:
-                    return f"Ticket#{tickets['number']}:\nName: {tickets['name']}\nPrice: {tickets['price']}\n\n"
-            raise IndexError("Invalid argument")
-
-    @staticmethod
-    def name(person):
-        if not person or not isinstance(person, Person):
-            raise RuntimeError("The number must be int")
-        with open('purchased_tickets.json', 'r') as file:
-            ticket_list = []
-            for tickets in json.load(file)["ticket"]:
-                if tickets["name"] == person.name:
-                    ticket_list.append(tickets)
-            return ticket_list
-
-
 student_ticket = Student_ticket()
 regular_ticket = Regular_ticket()
-ticket = Tickets()
 
 Maks = Person("Maks")
 David = Person("David")
@@ -152,14 +145,14 @@ David = Person("David")
 print(f'Price student ticket: {student_ticket.price_tickets()}')
 print(f'Price regular ticket: {regular_ticket.price_tickets()}\n\n')
 
-ticket.buy_ticket(Maks)
-ticket.buy_ticket(Maks)
-ticket.buy_ticket(Maks)
-ticket.buy_ticket(David)
+regular_ticket.buy_ticket(Maks)
+regular_ticket.buy_ticket(Maks)
+regular_ticket.buy_ticket(Maks)
+regular_ticket.buy_ticket(David)
 student_ticket.buy_ticket(Maks)
 
-print(f'{ticket.number(55)}')
+print(f'{regular_ticket.number(65)}')
 
 print("Tickets bought by Maks: ")
-for i in range(len(ticket.name(Maks))):
-    print('\n '.join([f' {key.capitalize()}: {value}' for key, value in ticket.name(Maks)[i].items()]) + "\n")
+for i in range(len(regular_ticket.name(Maks))):
+    print('\n '.join([f' {key.capitalize()}: {value}' for key, value in regular_ticket.name(Maks)[i].items()]) + "\n")
