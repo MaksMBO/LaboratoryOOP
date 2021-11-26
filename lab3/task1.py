@@ -73,9 +73,6 @@ class Regular_ticket:
             raise TypeError("Price must be a number")
         self.__price = value
 
-    def show_price(self):
-        return self.price
-
     @staticmethod
     def number(value):
         if not value or not isinstance(value, int):
@@ -130,10 +127,9 @@ class Regular_ticket:
 class Student_ticket(Regular_ticket):
     def __init__(self):
         super().__init__()
-        self.student_ticket_price = self.price * STUDENT_TICKET
 
     def price_tickets(self):
-        return self.student_ticket_price
+        return self.price * STUDENT_TICKET
 
 
 student_ticket = Student_ticket()
@@ -151,7 +147,7 @@ regular_ticket.buy_ticket(Maks)
 regular_ticket.buy_ticket(David)
 student_ticket.buy_ticket(Maks)
 
-print(f'{regular_ticket.number(65)}')
+print(f'{regular_ticket.number(80)}')
 
 print("Tickets bought by Maks: ")
 for i in range(len(regular_ticket.name(Maks))):
