@@ -97,7 +97,7 @@ class Order:
 
     @person.setter
     def person(self, person):
-        if not person:
+        if not person and not isinstance(person, Customer):
             raise TypeError("No value")
         self.__person = person
 

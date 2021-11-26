@@ -23,7 +23,7 @@ class Text:
         file = open(self.file)
         num = 0
         for line in file:
-            num += len(re.findall(r"[A-Za-z`]+", line))
+            num += len(re.findall(r"\w+", line))
         file.close()
         return num
 
