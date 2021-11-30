@@ -1,5 +1,8 @@
+from datetime import datetime
+
+
 class Calendar:
-    def __init__(self, day, month, year):
+    def __init__(self, day=datetime.now().day, month=datetime.now().month, year=datetime.now().year):
         self.__day = day
         self.__month = month
         self.__year = year
@@ -35,4 +38,8 @@ class Calendar:
         self.__year = year
 
     def __str__(self):
-        return f""
+        return f"Year: {self.__year}, month: {self.__month}, day: {self.__day}"
+
+
+today = Calendar()
+print(today)
