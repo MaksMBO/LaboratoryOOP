@@ -78,6 +78,28 @@ class Calendar:
     def __isub__(self, other):
         if not isinstance(other, Calendar):
             raise TypeError("The entered value is of the wrong type")
+        self.day -= other.__day
+        if self.__month in (FEBRUARY, APRIL, JUNE, AUGUST, SEPTEMBER, NOVEMBER, JANUARY) and self.__day <= ZERO:
+            self.__day += THIRTY_ONE
+            self.__month -= ONE
+        elif self.__month == MARCH and self.__day <= ZERO:
+            self.__day += TWENTY_EIGHT
+            self.__month -= ONE
+        elif self.__day <= ZERO:
+            self.__day += THIRTY
+            self.__month -= ONE
+
+        self.__month -= other.__month
+        if self.__month <= ZERO:
+            self.__month += TWELVE
+            self.__year -= ONE
+
+        self.__year -= other.__year
+        if self.__year < ZERO:
+            raise ValueError("First date, less than second")
+        return self
+
+
 
 
     def __str__(self):
@@ -87,6 +109,7 @@ class Calendar:
 day = Calendar(1, 11, 2020)
 day2 = Calendar(13, 11, 2020)
 
-day += day2
+# day += day2
+day2 -= day
 
-print(day)
+print(day2)
