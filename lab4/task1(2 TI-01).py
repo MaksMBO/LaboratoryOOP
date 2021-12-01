@@ -1,5 +1,5 @@
 from datetime import datetime
-from datetime import timedelta
+import calendar
 from variables import *
 
 
@@ -8,9 +8,6 @@ class Calendar:
         self.year = year
         self.month = month
         self.day = days
-
-
-
 
     @property
     def day(self):
@@ -23,9 +20,10 @@ class Calendar:
         if self.__month in (APRIL, JUNE, SEPTEMBER, NOVEMBER):
             if not ZERO < days <= THIRTY:
                 raise ValueError("Date must be greater than 0 and no greater than 30")
-        if self.__month == FEBRUARY:
-            if not ZERO < days <= TWENTY_EIGHT:
-                raise ValueError("Date must be greater than 0 and no greater than 28")
+        if self.__month == FEBRUARY and calendar.isleap(self.__year) and not ZERO < days <= TWENTY_NINE:
+            raise ValueError("Date must be greater than 0 and no greater than 29")
+        if self.__month == FEBRUARY and not calendar.isleap(self.__year) and not ZERO < days <= TWENTY_EIGHT:
+            raise ValueError("Date must be greater than 0 and no greater than 28")
         if not ZERO < days <= THIRTY_ONE:
             raise ValueError("Date must be greater than 0 and no greater than 31")
         self.__day = days
@@ -38,7 +36,7 @@ class Calendar:
     def month(self, month):
         if not isinstance(month, int):
             raise TypeError("The value must be a int")
-        if not ZERO < month < TWELVE:
+        if not ZERO < month <= TWELVE:
             raise ValueError("month must be between 0 and 12")
         self.__month = month
 
@@ -56,60 +54,153 @@ class Calendar:
         if not isinstance(other, Calendar):
             raise TypeError("The entered value is of the wrong type")
         self.__day += other.__day
-        if self.__month in (APRIL, JUNE, SEPTEMBER, NOVEMBER) and self.__day > THIRTY:
-            self.__day -= THIRTY
-            self.__month += ONE
-        elif self.__month == FEBRUARY and self.__day > TWENTY_EIGHT:
-            self.__day -= TWENTY_EIGHT
-            self.__month += ONE
-        elif self.__day > THIRTY_ONE:
-            self.__day -= THIRTY_ONE
-            self.__month += ONE
-
         self.__month += other.__month
-        if self.__month > TWELVE:
-            self.__month -= TWELVE
-            self.__year += 1
-
         self.__year += other.__year
-        return self
 
+        while True:
+            if self.__month > 12:
+                self.__month -= TWELVE
+                self.__year += ONE
+
+            if self.__month in (APRIL, JUNE, SEPTEMBER, NOVEMBER) and self.__day > THIRTY:
+                self.__day -= THIRTY
+                self.__month += ONE
+            elif self.__month == FEBRUARY and calendar.isleap(self.__year) and self.__day > 29:
+                self.__day -= TWENTY_NINE
+                self.__month += ONE
+            elif self.__month == FEBRUARY and not calendar.isleap(self.__year) and self.__day > 28:
+                self.__day -= TWENTY_EIGHT
+                self.__month += ONE
+            elif self.__day > THIRTY_ONE:
+                self.__day -= THIRTY_ONE
+                self.__month += ONE
+            else:
+                break
+        return self
 
     def __isub__(self, other):
         if not isinstance(other, Calendar):
             raise TypeError("The entered value is of the wrong type")
-        self.day -= other.__day
-        if self.__month in (FEBRUARY, APRIL, JUNE, AUGUST, SEPTEMBER, NOVEMBER, JANUARY) and self.__day <= ZERO:
-            self.__day += THIRTY_ONE
-            self.__month -= ONE
-        elif self.__month == MARCH and self.__day <= ZERO:
-            self.__day += TWENTY_EIGHT
-            self.__month -= ONE
-        elif self.__day <= ZERO:
-            self.__day += THIRTY
-            self.__month -= ONE
-
+        self.__day -= other.__day
         self.__month -= other.__month
-        if self.__month <= ZERO:
-            self.__month += TWELVE
-            self.__year -= ONE
-
         self.__year -= other.__year
-        if self.__year < ZERO:
-            raise ValueError("First date, less than second")
+
+        while True:
+            if self.__month <= 0:
+                self.__month += TWELVE
+                self.__year -= ONE
+
+            if self.__month in (FEBRUARY, APRIL, JUNE, AUGUST, SEPTEMBER, NOVEMBER, JANUARY) and self.__day <= 0:
+                self.__day += THIRTY_ONE
+                self.__month -= ONE
+            elif self.__month == MARCH and calendar.isleap(self.__year) and self.__day <= 0:
+                self.__day += TWENTY_NINE
+                self.__month -= ONE
+            elif self.__day == MARCH and not calendar.isleap(self.__year) and self.__day <= 0:
+                self.__day += TWENTY_EIGHT
+                self.__month -= ONE
+            elif self.__day <= 0:
+                self.__day += THIRTY
+                self.__month -= ONE
+            else:
+                break
         return self
 
+    def __eq__(self, other):
+        if not isinstance(other, Calendar):
+            raise TypeError("The entered value is of the wrong type")
+        if self.__day == other.__day and self.__month == other.__month and self.__year == other.__year:
+            return True
+        return False
 
+    def __ne__(self, other):
+        if not isinstance(other, Calendar):
+            raise TypeError("The entered value is of the wrong type")
+        if self.__day == other.__day and self.__month == other.__month and self.__year == other.__year:
+            return False
+        return True
 
+    def __lt__(self, other):
+        if not isinstance(other, Calendar):
+            raise TypeError("The entered value is of the wrong type")
+        if self.__year < other.__year:
+            return True
+        if self.__year == other.__year:
+            if self.__month < other.__month:
+                return True
+            if self.__month == other.__month:
+                if self.__day < other.__day:
+                    return True
+        return False
+
+    def __le__(self, other):
+        if not isinstance(other, Calendar):
+            raise TypeError("The entered value is of the wrong type")
+        if self.__year < other.__year:
+            return True
+        if self.__year == other.__year:
+            if self.__month < other.__month:
+                return True
+            if self.__month == other.__month:
+                if self.__day <= other.__day:
+                    return True
+        return False
+
+    def __gt__(self, other):
+        if not isinstance(other, Calendar):
+            raise TypeError("The entered value is of the wrong type")
+        if self.__year > other.__year:
+            return True
+        if self.__year == other.__year:
+            if self.__month > other.__month:
+                return True
+            if self.__month == other.__month:
+                if self.__day > other.__day:
+                    return True
+        return False
+
+    def __ge__(self, other):
+        if not isinstance(other, Calendar):
+            raise TypeError("The entered value is of the wrong type")
+        if self.__year > other.__year:
+            return True
+        if self.__year == other.__year:
+            if self.__month > other.__month:
+                return True
+            if self.__month == other.__month:
+                if self.__day >= other.__day:
+                    return True
+        return False
 
     def __str__(self):
         return f"Year: {self.__year}, month: {self.__month}, day: {self.__day}"
 
 
-day = Calendar(1, 11, 2020)
-day2 = Calendar(13, 11, 2020)
-
-# day += day2
-day2 -= day
-
+today = Calendar()
+day2 = Calendar(1, 1, 1)
+day2 += today
 print(day2)
+
+day3 = Calendar(1, 1, 1)
+day2 -= day3
+print(day2)
+
+day4 = Calendar(2, 2, 2020)
+day5 = Calendar(2, 2, 2020)
+day6 = Calendar(29, 2, 2020)
+
+print(f"\n{day4} - day4")
+print(f"{day5} - day5")
+print(f"{day6} - day6\n")
+
+print(f"day4==day5 - {day4==day5}")
+print(f"day4!=day5 - {day4!=day5}\n")
+
+print(f"day4<day6 - {day4<day6}")
+print(f"day4<=day6 - {day4<=day6}")
+print(f"day4<=day5 - {day4<=day5}\n")
+
+print(f"day4>day6 - {day4>day6}")
+print(f"day4>=day6 - {day4>=day6}")
+print(f"day4>=day5 - {day4>=day5}")
+
