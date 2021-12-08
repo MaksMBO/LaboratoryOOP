@@ -1,18 +1,2 @@
-JANUARY = 1
-FEBRUARY = 2
-MARCH = 3
-APRIL = 4
-JUNE = 6
-AUGUST = 8
-SEPTEMBER = 9
-NOVEMBER = 11
-ZERO = 0
-THIRTY = 30
-TWENTY_EIGHT = 28
-THIRTY_ONE = 31
-TWELVE = 12
-ONE = 1
-TWENTY_NINE = 29
-
-
-
+day_month = {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+leap_year = {1: 31, 2: 29, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}

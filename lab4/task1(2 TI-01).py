@@ -17,15 +17,12 @@ class Calendar:
     def day(self, days):
         if not isinstance(days, int):
             raise TypeError("The value must be a int")
-        if self.__month in (APRIL, JUNE, SEPTEMBER, NOVEMBER):
-            if not ZERO < days <= THIRTY:
-                raise ValueError("Date must be greater than 0 and no greater than 30")
-        if self.__month == FEBRUARY and calendar.isleap(self.__year) and not ZERO < days <= TWENTY_NINE:
-            raise ValueError("Date must be greater than 0 and no greater than 29")
-        if self.__month == FEBRUARY and not calendar.isleap(self.__year) and not ZERO < days <= TWENTY_EIGHT:
-            raise ValueError("Date must be greater than 0 and no greater than 28")
-        if not ZERO < days <= THIRTY_ONE:
-            raise ValueError("Date must be greater than 0 and no greater than 31")
+        if calendar.isleap(self.__year):
+            if not 0 < days <= leap_year[self.__month]:
+                raise ValueError("Incorrect date")
+        else:
+            if not 0 < days <= day_month[self.__month]:
+                raise ValueError("Incorrect date")
         self.__day = days
 
     @property
@@ -36,7 +33,7 @@ class Calendar:
     def month(self, month):
         if not isinstance(month, int):
             raise TypeError("The value must be a int")
-        if not ZERO < month <= TWELVE:
+        if not 0 < month <= 12:
             raise ValueError("month must be between 0 and 12")
         self.__month = month
 
@@ -56,26 +53,22 @@ class Calendar:
         self.__day += other.__day
         self.__month += other.__month
         self.__year += other.__year
+        if self.__month > 12:
+            self.__month -= 12
+            self.__year += 1
 
-        while True:
-            if self.__month > 12:
-                self.__month -= TWELVE
-                self.__year += ONE
-
-            if self.__month in (APRIL, JUNE, SEPTEMBER, NOVEMBER) and self.__day > THIRTY:
-                self.__day -= THIRTY
-                self.__month += ONE
-            elif self.__month == FEBRUARY and calendar.isleap(self.__year) and self.__day > 29:
-                self.__day -= TWENTY_NINE
-                self.__month += ONE
-            elif self.__month == FEBRUARY and not calendar.isleap(self.__year) and self.__day > 28:
-                self.__day -= TWENTY_EIGHT
-                self.__month += ONE
-            elif self.__day > THIRTY_ONE:
-                self.__day -= THIRTY_ONE
-                self.__month += ONE
+        if day_month[self.__month] < self.__day:
+            if calendar.isleap(self.__year):
+                self.__day -= leap_year[self.__month]
             else:
-                break
+                self.__day -= day_month[self.__month]
+        if day_month[self.__month] < self.__day:
+            self.__month += 1
+            if calendar.isleap(self.__year) and day_month[self.__month] < self.__day:
+                self.__day -= leap_year[self.__month]
+            elif not calendar.isleap(self.__year) and day_month[self.__month] < self.__day:
+                self.__day -= day_month[self.__month]
+
         return self
 
     def __isub__(self, other):
@@ -84,26 +77,21 @@ class Calendar:
         self.__day -= other.__day
         self.__month -= other.__month
         self.__year -= other.__year
+        if self.__month <= 0:
+            self.__month += 12
+            self.__year -= 1
 
-        while True:
-            if self.__month <= 0:
-                self.__month += TWELVE
-                self.__year -= ONE
-
-            if self.__month in (FEBRUARY, APRIL, JUNE, AUGUST, SEPTEMBER, NOVEMBER, JANUARY) and self.__day <= 0:
-                self.__day += THIRTY_ONE
-                self.__month -= ONE
-            elif self.__month == MARCH and calendar.isleap(self.__year) and self.__day <= 0:
-                self.__day += TWENTY_NINE
-                self.__month -= ONE
-            elif self.__day == MARCH and not calendar.isleap(self.__year) and self.__day <= 0:
-                self.__day += TWENTY_EIGHT
-                self.__month -= ONE
-            elif self.__day <= 0:
-                self.__day += THIRTY
-                self.__month -= ONE
+        if self.__day <= 0:
+            self.__month -= 1
+            if calendar.isleap(self.__year):
+                self.__day += leap_year[self.__month]
             else:
-                break
+                self.__day += day_month[self.__month]
+        if self.__day > day_month[self.__month]:
+            if calendar.isleap(self.__year):
+                self.__day = leap_year[self.__month]
+            else:
+                self.__day = day_month[self.__month]
         return self
 
     def __eq__(self, other):
@@ -178,12 +166,13 @@ class Calendar:
 
 today = Calendar()
 day2 = Calendar(1, 1, 1)
-day2 += today
-print(day2)
+today += day2
+print(today)
 
+new_today = Calendar()
 day3 = Calendar(1, 1, 1)
-day2 -= day3
-print(day2)
+new_today -= day3
+print(new_today)
 
 day4 = Calendar(2, 2, 2020)
 day5 = Calendar(2, 2, 2020)
@@ -193,14 +182,13 @@ print(f"\n{day4} --> day4")
 print(f"{day5} --> day5")
 print(f"{day6} --> day6\n")
 
-print(f"day4==day5 --> {day4==day5}")
-print(f"day4!=day5 --> {day4!=day5}\n")
+print(f"day4==day5 --> {day4 == day5}")
+print(f"day4!=day5 --> {day4 != day5}\n")
 
-print(f"day4<day6 --> {day4<day6}")
-print(f"day4<=day6 --> {day4<=day6}")
-print(f"day4<=day5 --> {day4<=day5}\n")
+print(f"day4<day6 --> {day4 < day6}")
+print(f"day4<=day6 --> {day4 <= day6}")
+print(f"day4<=day5 --> {day4 <= day5}\n")
 
-print(f"day4>day6 --> {day4>day6}")
-print(f"day4>=day6 --> {day4>=day6}")
-print(f"day4>=day5 --> {day4>=day5}")
-
+print(f"day4>day6 --> {day4 > day6}")
+print(f"day4>=day6 --> {day4 >= day6}")
+print(f"day4>=day5 --> {day4 >= day5}")
