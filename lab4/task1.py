@@ -44,8 +44,7 @@ class Rational:
         elif isinstance(other, int):
             numerator = self.__numerator * other
             return Rational(numerator, self.__denominator)
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __truediv__(self, other):
         if isinstance(other, Rational):
@@ -57,8 +56,7 @@ class Rational:
         elif isinstance(other, int):
             denominator = self.__denominator * other
             return Rational(self.__numerator, denominator)
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __add__(self, other):
         if isinstance(other, Rational):
@@ -68,8 +66,7 @@ class Rational:
         elif isinstance(other, int):
             numerator = self.__numerator + self.__denominator * other
             return Rational(numerator, self.__denominator)
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __sub__(self, other):
         if isinstance(other, Rational):
@@ -79,8 +76,7 @@ class Rational:
         elif isinstance(other, int):
             numerator = self.__numerator - self.__denominator * other
             return Rational(numerator, self.__denominator)
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __iadd__(self, other):
         if isinstance(other, Rational):
@@ -90,8 +86,7 @@ class Rational:
         elif isinstance(other, int):
             self.__numerator = self.__numerator + self.__denominator * other
             return self
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __isub__(self, other):
         if isinstance(other, Rational):
@@ -101,8 +96,7 @@ class Rational:
         elif isinstance(other, int):
             self.__numerator = self.__numerator - self.__denominator * other
             return self
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __imul__(self, other):
         if isinstance(other, Rational):
@@ -112,8 +106,7 @@ class Rational:
         elif isinstance(other, int):
             self.__numerator = self.__numerator * other
             return self
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __itruediv__(self, other):
         if isinstance(other, Rational):
@@ -125,56 +118,49 @@ class Rational:
         elif isinstance(other, int):
             self.__denominator = self.__denominator * other
             return self
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __eq__(self, other):
         if isinstance(other, Rational):
             return self.__numerator * other.__denominator == other.__numerator * self.__denominator
         elif isinstance(other, int):
             return self.__numerator == other * self.__denominator
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __ne__(self, other):
         if isinstance(other, Rational):
             return self.__numerator * other.__denominator != other.__numerator * self.__denominator
         elif isinstance(other, int):
             return self.__numerator != other * self.__denominator
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __lt__(self, other):
         if isinstance(other, Rational):
             return self.__numerator * other.__denominator < other.__numerator * self.__denominator
         elif isinstance(other, int):
             return self.__numerator < other * self.__denominator
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __le__(self, other):
         if isinstance(other, Rational):
             return self.__numerator * other.__denominator <= other.__numerator * self.__denominator
         elif isinstance(other, int):
             return self.__numerator <= other * self.__denominator
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __gt__(self, other):
         if isinstance(other, Rational):
             return self.__numerator * other.__denominator > other.__numerator * self.__denominator
         elif isinstance(other, int):
             return self.__numerator > other * self.__denominator
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __ge__(self, other):
         if isinstance(other, Rational):
             return self.__numerator * other.__denominator >= other.__numerator * self.__denominator
         elif isinstance(other, int):
             return self.__numerator >= other * self.__denominator
-        else:
-            raise TypeError("The entered value is of the wrong type")
+        return NotImplemented
 
     def __str__(self):
         return "/".join(map(str, self.fraction_reduction()))

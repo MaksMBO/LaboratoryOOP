@@ -49,7 +49,7 @@ class Calendar:
 
     def __iadd__(self, other):
         if not isinstance(other, Calendar):
-            raise TypeError("The entered value is of the wrong type")
+            return NotImplemented
         self.__day += other.__day
         self.__month += other.__month
         self.__year += other.__year
@@ -73,7 +73,7 @@ class Calendar:
 
     def __isub__(self, other):
         if not isinstance(other, Calendar):
-            raise TypeError("The entered value is of the wrong type")
+            return NotImplemented
         self.__day -= other.__day
         self.__month -= other.__month
         self.__year -= other.__year
