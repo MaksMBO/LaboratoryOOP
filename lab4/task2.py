@@ -53,13 +53,6 @@ class Teacher(ITeacher):
         with open('teacher.json', 'w') as file_teacher_write:
             json.dump(all_teacher, file_teacher_write, indent=4)
 
-    #
-
-    # def teacher_add_json(self):
-    #     with open('teacher.json', 'r') as file:
-    #         all_teacher = json.load(file)
-    #     teacher['']
-    #     with open('teacher.json', 'w') as file:
 
     def __str__(self):
         return f"Name: {self.__name}, course: {', '.join(self.course)}"
@@ -245,11 +238,6 @@ class ICourseFactory(ABC):
     def adding_teacher(name):
         pass
 
-    # @staticmethod
-    # @abstractmethod
-    # def adding_course(course_name, teacher, course_program):
-    #     pass
-
     @staticmethod
     @abstractmethod
     def adding_local_course(course_name, teacher, course_program, local_labs):
@@ -264,6 +252,7 @@ class ICourseFactory(ABC):
 class CourseFactory(ICourseFactory):
     @staticmethod
     def adding_teacher(name):
+        # Teacher(name).course_of_teacher()
         return Teacher(name)
 
     @staticmethod
