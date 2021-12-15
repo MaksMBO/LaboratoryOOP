@@ -1,1 +1,45 @@
-[]
+[
+    {
+        "Igor": [
+            {
+                "course_name": "Probability theory",
+                "course_program": [
+                    "Bayesian formula",
+                    "Random events"
+                ],
+                "teacher": [
+                    "Igor"
+                ],
+                "local laboratory": "Mayakovsky, 34"
+            }
+        ]
+    },
+    {
+        "Slava": [
+            {
+                "course_name": "Music",
+                "course_program": [
+                    "Breathing",
+                    "Voice",
+                    "High case"
+                ],
+                "teacher": [
+                    "Slava"
+                ],
+                "city": "Lviv"
+            },
+            {
+                "course_name": "German courses",
+                "course_program": [
+                    "Grammar",
+                    "Listening",
+                    "Speaking"
+                ],
+                "teacher": [
+                    "Slava"
+                ],
+                "city": "Zhytomyr"
+            }
+        ]
+    }
+]
